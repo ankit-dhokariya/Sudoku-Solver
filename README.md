@@ -1,9 +1,10 @@
 # Sudoku-Solver
 
-Run GUI.py using Python3
+**Run GUI.py using Python3**
+
+![](rules.jpg)
 
 Rules:
-![](rules.jpeg)
 1. Each number can appear once in a row.
 2. Each number can appear once in a column.
 3. Each number can appear once in a block.
