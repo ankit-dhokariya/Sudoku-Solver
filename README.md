@@ -2,7 +2,7 @@
 
 **Run GUI.py using Python3**
 
-![](Sudoku Solver/Images/rules.jpg)
+![](rules.jpg)
 
 Rules:
 1. Each number can appear once in a row.
