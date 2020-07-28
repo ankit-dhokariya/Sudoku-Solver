@@ -1,18 +1,20 @@
 import pygame as pg
 import time
 import os
-from game import *
-from puzzle_generator import *
-pg.font.init()
+import game
+import puzzle_generator
+# pg.font.init()
 
 width = 630
 height = 630
 background_color = (30, 30, 30)
+fonttype = "lucidasans"
+fontsize = 28
 pad = 80
 
 class Grid:
 
-    board = puzzle(3)
+    board = puzzle_generator.puzzle(3)
 
     def __init__(self, rows, cols, width, height, screen):
         self.rows = rows
@@ -34,7 +36,7 @@ class Grid:
             self.cubes[row][col].set(val)
             self.update_model()
 
-            if check_validity(self.model, val, (row, col)) and solution(self.model):
+            if game.check_validity(self.model, val, (row, col)) and game.solution(self.model):
                 return True
             else:
                 self.cubes[row][col].set(0)
@@ -99,14 +101,14 @@ class Grid:
 
     def gui_solution(self, animation):
 
-        find = find_blank(self.model)
+        find = game.find_blank(self.model)
         if not find:
             return True
         else:
             row, col = find
 
         for i in range(1, 10):
-            if check_validity(self.model, i, (row, col)):
+            if game.check_validity(self.model, i, (row, col)):
                 self.model[row][col] = i
                 self.cubes[row][col].set(i)
                 if animation is True:
@@ -144,7 +146,7 @@ class Cube:
 
     def draw(self, screen):
 
-        font = pg.font.SysFont("comicsans", 40)
+        font = pg.font.SysFont(fonttype, fontsize)
 
         space = self.width / 9
         x = self.col * space
@@ -161,7 +163,7 @@ class Cube:
             pg.draw.rect(screen, (255, 0, 0), (x, y, space, space), 3)
 
     def draw_change(self, screen, g=True):
-        font = pg.font.SysFont("comicsans", 40)
+        font = pg.font.SysFont(fonttype, fontsize)
 
         space = self.width / 9
         x = self.col * space
@@ -185,10 +187,10 @@ class Cube:
 def redraw_window(screen, board, time, strikes, end, background_color, button_color, animation, gaveup):
 
     screen.fill(background_color)
-    font = pg.font.SysFont("comicsans", 40)
+    font = pg.font.SysFont(fonttype, fontsize)
 
     ani_text = font.render("Animation", 1, (255, 255, 255))
-    screen.blit(ani_text, (10, 30))
+    screen.blit(ani_text, (10, 23))
 
     on = pg.image.load("Images\\on.png")
     off = pg.image.load("Images\\off.png")
@@ -198,8 +200,8 @@ def redraw_window(screen, board, time, strikes, end, background_color, button_co
         screen.blit(off, (ani_text.get_width() + 20, 23))
 
     text = font.render("Time: " + format_time(time), 1, (255, 255, 255))
-    screen.blit(text, (width - 180, height + 35 + pad))
-    pg.draw.line(screen, (255, 255, 255), (width - 180, height + 60 + pad), (width - 20, height + 60 + pad))
+    screen.blit(text, (width - 180, height + 20 + pad))
+    pg.draw.line(screen, (255, 255, 255), (width - 180, height + 60 + pad), (width - 10, height + 60 + pad))
 
     if end is True:
         if gaveup is True:
@@ -215,7 +217,7 @@ def redraw_window(screen, board, time, strikes, end, background_color, button_co
             if strikes < 3:
                 giveup = font.render("Solve", 1, (0, 0, 0))
                 pg.draw.rect(screen, button_color, (width / 2 - 40, height + 30 + pad, 83, 38), 0)
-                screen.blit(giveup, (width / 2 - 35, height + 35 + pad))
+                screen.blit(giveup, (width / 2 - 35, height + 30 + pad))
                 heart = pg.image.load("Images\\heart.png")
                 for i in range(3 - strikes):
                     screen.blit(heart, (35 * i + 10, height + 35 + pad))
